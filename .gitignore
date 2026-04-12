@@ -1,0 +1,5 @@
+*.xlsx
+*.db
+*.pdf
+__pycache__/
+src/config/crypto_wallet_ses.py
