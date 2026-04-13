@@ -34,16 +34,43 @@
 
 ---
 
-## 6. Project File Structure
+## 6. Data Continuity & Update Logic
+* **Incremental Processing:** 매번 전체 기간을 재계산하는 대신, `MPAA_Result.db`의 마지막 기록 날짜를 확인하여 신규 데이터만 연산하는 증분 업데이트 방식을 채택합니다.
+* **SQLite Double-Buffering:** 원천 데이터(`MPAA_price.db`)와 결과 데이터(`MPAA_Result.db`)를 분리하여 데이터 무결성을 유지하고 처리 속도를 최적화합니다.
+* **Storage Optimization:** 비중 데이터 저장 시 값이 0인 항목은 제외하고, `chunksize` 파라미터를 조정하여 SQLite의 SQL 변수 제한(999개) 에러를 방지합니다.
+
+---
+
+## 7. Visualization & Monitoring (Dash)
+* **Hybrid Dashboard:** `Plotly Dash`를 활용하여 웹 기반 분석 환경을 제공합니다.
+* **Dual-Pane Charts:** 상단에는 누적 수익률 곡선을, 하단에는 MDD와 Sharpe Ratio를 배치하여 수익과 리스크를 동시에 모니터링합니다.
+* **Interactive Weight Lookup:** 차트의 특정 시점(날짜)을 클릭하면 해당 날짜의 상세 ETF 포트폴리오 비중을 하단 테이블에 실시간으로 출력합니다.
+* **Responsive Layout:** 브라우저 창 크기에 따라 그래프 크기가 유동적으로 조절되는 가변형 레이아웃을 적용했습니다.
+
+---
+
+## 8. Operations & Security (Git Workflow)
+* **Automated Guard (g-all):** PowerShell 기반의 커스텀 함수를 통해 업로드 전 보안 검사를 자동화합니다.
+* **Data Exclusion:** `.gitignore` 및 사전 스캔 로직을 통해 대용량 DB 파일(`.db`)과 기술 문서(`.pdf`, `.xlsx`, `.pptx`, `.md`)가 Public Repository에 유출되는 것을 원천 차단합니다.
+* **Encoding Optimization:** 터미널 및 파일 인코딩을 UTF-8로 강제 설정하여 윈도우 환경에서의 한글 깨짐 및 Git 인덱싱 오류를 해결했습니다.
+
+---
+
+## 9. Expanded Project File Structure
 ```text
 MPAA_Gemini/
 ├── src/
 │   ├── config/
-│   │   └── invest_items.py      # ETF 목록 및 자산군별 비중 설정
+│   │   ├── invest_items.py      # ETF 목록 및 비중 설정
+│   │   └── menulist.py          # (신규) 시스템 메뉴 및 UI 설정
 │   ├── data/
-│   │   └── loader.py            # SQLite DB 연동 및 데이터 전처리
+│   │   └── loader.py            # SQLite DB 로더
 │   ├── engine/
-│   │   ├── momentum.py          # 스코어링, 비중 할당, 메타 엔진 로직
-│   │   └── analytics.py         # 성과 지표 분석 모듈
-│   └── main.py                  # 전체 프로세스 통합 실행 및 리포트 출력
-└── MPAA_price.db                # 시세 데이터베이스
+│   │   ├── momentum.py          # 핵심 모멘텀 및 메타 엔진
+│   │   └── analytics.py         # 성과 지표 산출
+│   ├── dashboard/
+│   │   └── app.py               # (신규) Dash 웹 대시보드 메인
+│   └── main.py                  # 전체 프로세스 통합 및 증분 업데이트 실행
+├── MPA_price.db                 # 원천 시세 데이터베이스
+├── MPAA_Result.db               # (신규) 백테스트 결과 및 비중 저장 DB
+└── .gitignore
