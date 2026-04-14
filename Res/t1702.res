@@ -1,0 +1,41 @@
+BEGIN_FUNCTION_MAP
+	.Func,외인기관종목별동향(t1702),t1702,attr,block,headtype=A;
+	BEGIN_DATA_MAP
+	t1702InBlock,기본입력,input;
+	begin
+		종목코드,shcode,shcode,char,6;
+		시작일자,fromdt,fromdt,char,8;
+		종료일자,todt,todt,char,8;
+		금액수량구분(0:금액1:수량2:단가),volvalgb,volvalgb,char,1;
+		매수매도구분(0:순매수1:매수2:매도),msmdgb,msmdgb,char,1;
+		누적구분(0:일간1:누적),gubun,gubun,char,1;
+		거래소구분코드,exchgubun,exchgubun,char,1;
+	end
+	t1702OutBlock1,출력,output,occurs;
+	begin
+		일자,date,date,char,8;
+		종가,close,close,long,8;
+		전일대비구분,sign,sign,char,1;
+		전일대비,change,change,long,8;
+		등락율,diff,diff,float,6.2;
+		누적거래량,volume,volume,long,12;
+		사모펀드,tjj0000,tjj0000,long,12;
+		증권,tjj0001,tjj0001,long,12;
+		보험,tjj0002,tjj0002,long,12;
+		투신,tjj0003,tjj0003,long,12;
+		은행,tjj0004,tjj0004,long,12;
+		종금,tjj0005,tjj0005,long,12;
+		기금,tjj0006,tjj0006,long,12;
+		기타법인,tjj0007,tjj0007,long,12;
+		개인,tjj0008,tjj0008,long,12;
+		등록외국인,tjj0009,tjj0009,long,12;
+		미등록외국인,tjj0010,tjj0010,long,12;
+		국가외,tjj0011,tjj0011,long,12;
+		기관,tjj0018,tjj0018,long,12;
+		외인계(등록+미등록),tjj0016,tjj0016,long,12;
+		기타계(기타+국가),tjj0017,tjj0017,long,12;
+		거래대금,value,value,long,12;
+	end
+	END_DATA_MAP
+END_FUNCTION_MAP
+
